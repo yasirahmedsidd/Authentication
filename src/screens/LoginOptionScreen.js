@@ -4,24 +4,25 @@ import {
   Text,
   View,
   Dimensions,
-  Button,
-  TouchableWithoutFeedback,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+
 const LoginOptionScreen = () => {
   const navigation = useNavigation();
   navigation.setOptions({
     headerShown: false,
   });
+
   return (
     <View
       style={{
-        // height: Dimensions.get('window').height,
         backgroundColor: 'black',
         flex: 1,
         alignItems: 'center',
       }}>
+      <StatusBar barStyle="light-content" backgroundColor="#000" />
       <Text style={{color: '#fff', fontSize: 24, padding: 50}}>
         LoginOptionScreen
       </Text>
@@ -57,7 +58,6 @@ const LoginOptionScreen = () => {
     </View>
   );
 };
-
 export default LoginOptionScreen;
 
 const styles = StyleSheet.create({});
