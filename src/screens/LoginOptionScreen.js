@@ -1,6 +1,6 @@
-import React from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect} from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   Dimensions,
@@ -8,7 +8,6 @@ import {
   StatusBar,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
 const LoginOptionScreen = () => {
   const navigation = useNavigation();
   navigation.setOptions({
@@ -59,5 +58,3 @@ const LoginOptionScreen = () => {
   );
 };
 export default LoginOptionScreen;
-
-const styles = StyleSheet.create({});

@@ -6,9 +6,9 @@ import LoadingScreen from './LoadingScreen';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {logoutUser} from '../redux/actions/authActions';
+import AsyncStorage from '@react-native-community/async-storage';
 const ProfileScreen = props => {
   const navigation = useNavigation();
-
   const [farms, setFarms] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +18,7 @@ const ProfileScreen = props => {
       setFarms([]);
     };
   }, []);
+
   const fetchFarms = async () => {
     setIsLoading(true);
     UserApi.get('/farmhouses')
@@ -30,6 +31,7 @@ const ProfileScreen = props => {
         setIsLoading(false);
       });
   };
+
   const reload = async () => {
     setFarms([]);
     setError(null);

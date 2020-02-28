@@ -3,6 +3,7 @@ const initialState = {
   token: null,
   isLoading: false,
   error: '',
+  asyncLoading: false,
 };
 
 export default (state = initialState, {type, data}) => {
@@ -13,18 +14,24 @@ export default (state = initialState, {type, data}) => {
     case actions.LOADING_END:
       return {...state, isLoading: false};
 
-    case actions.CREATE_USER:
-      return {...state, token: data, error: ''};
+    case actions.SET_TOKEN:
+      return {...state, token: data};
 
-    case actions.LOGIN_USER:
-      console.log('LOGIN USER REDUCER RAN');
-      return {...state, token: data, error: ''};
-
-    case actions.LOGOUT_USER:
-      return {...state, token: null, error: ''};
+    case actions.DELETE_TOKEN:
+      return {...state, token: null};
 
     case actions.ERROR:
       return {...state, error: data, token: null};
+
+    case actions.CLEAR_ERROR:
+      return {...state, error: ''};
+
+    case actions.ASYNC_LOADING_START:
+      return {...state, asyncLoading: true};
+
+    case actions.ASYNC_LOADING_END:
+      return {...state, asyncLoading: false};
+
     default:
       return state;
   }

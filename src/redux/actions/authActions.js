@@ -1,12 +1,20 @@
 import UserApi from '../../apis/UserApi';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const actions = {
-  LOGIN_USER: 'LOGIN_USER',
-  CREATE_USER: 'CREATE_USER',
-  LOGOUT_USER: 'LOGOUT_USER',
+  SET_TOKEN: 'SET_TOKEN',
   ERROR: 'ERROR',
   LOADING_START: 'LOADING_START',
   LOADING_END: 'LOADING_END',
+  DELETE_TOKEN: 'DELETE_TOKEN',
+  CLEAR_ERROR: 'CLEAR_ERROR',
+  //async storage actions
+  ASYNC_LOADING_START: 'ASYNC_LOADING_START',
+  ASYNC_LOADING_END: 'ASYNC_LOADING_END',
+  ASYNC_SAVE_TOKEN: 'ASYNC_SAVE_TOKEN',
+  ASYNC_GET_TOKEN: 'ASYNC_GET_TOKEN',
+  ASYNC_DELETE_TOKEN: 'ASYNC_DELETE_TOKEN',
+  ASYNC_ERROR: 'ASYNC_ERROR',
 };
 
 export const createUser = (contact, pass) => {
@@ -24,8 +32,12 @@ export const createUser = (contact, pass) => {
     UserApi.post('/signup', bodyData)
       .then(res => {
         dispatch({
-          type: actions.CREATE_USER,
+          type: actions.SET_TOKEN,
           data: res.data.token,
+        });
+        storeData('token', res.data.token);
+        dispatch({
+          type: actions.CLEAR_ERROR,
         });
         dispatch({
           type: actions.LOADING_END,
@@ -45,8 +57,6 @@ export const createUser = (contact, pass) => {
 
 export const loginUser = (contact, pass) => {
   const bodyData = {contact, password: pass};
-  console.log(`LOGIN USER ACTION RAN ${JSON.stringify(bodyData)}`);
-
   return async dispatch => {
     dispatch({
       type: actions.LOADING_START,
@@ -57,9 +67,14 @@ export const loginUser = (contact, pass) => {
     UserApi.post('/login', bodyData)
       .then(res => {
         dispatch({
-          type: actions.LOGIN_USER,
+          type: actions.SET_TOKEN,
           data: res.data.token,
         });
+        dispatch({
+          type: actions.SET_TOKEN,
+          data: res.data.token,
+        });
+        storeData('token', res.data.token);
         dispatch({
           type: actions.LOADING_END,
         });
@@ -75,17 +90,54 @@ export const loginUser = (contact, pass) => {
       });
   };
 };
-
 export const logoutUser = () => {
   return async dispatch => {
     dispatch({
       type: actions.LOADING_START,
     });
     dispatch({
-      type: actions.LOGOUT_USER,
+      type: actions.DELETE_TOKEN,
     });
     dispatch({
       type: actions.LOADING_END,
     });
+  };
+};
+
+const storeData = async (key, data) => {
+  try {
+    await AsyncStorage.setItem(key, data);
+    // const val = await AsyncStorage.getItem(key);
+    // console.log(val);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const trylocalSignin = key => {
+  return async dispatch => {
+    try {
+      const val = await AsyncStorage.getItem(key);
+      dispatch({
+        type: actions.ASYNC_LOADING_START,
+      });
+      if (val) {
+        dispatch({
+          type: actions.SET_TOKEN,
+          data: val,
+        });
+        dispatch({
+          type: actions.ASYNC_LOADING_END,
+        });
+      }
+    } catch (err) {
+      dispatch({
+        type: actions.ASYNC_ERROR,
+        data: err,
+      });
+      dispatch({
+        type: actions.ASYNC_LOADING_END,
+      });
+    }
   };
 };
