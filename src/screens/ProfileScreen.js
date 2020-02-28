@@ -3,7 +3,10 @@ import {StyleSheet, Text, View, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import UserApi from '../apis/UserApi';
 import LoadingScreen from './LoadingScreen';
-const ProfileScreen = () => {
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {logoutUser} from '../redux/actions/authActions';
+const ProfileScreen = props => {
   const navigation = useNavigation();
 
   const [farms, setFarms] = useState([]);
@@ -36,10 +39,7 @@ const ProfileScreen = () => {
     return (
       <View>
         <Text>ProfileScreen</Text>
-        <Button
-          title="Log out"
-          onPress={() => navigation.navigate('LoginOptions')}
-        />
+        <Button title="Log out" onPress={() => props.logoutUser()} />
         <Button title="Reload" onPress={reload} />
         <View>
           <Text>{JSON.stringify(farms)}</Text>
@@ -53,6 +53,10 @@ const ProfileScreen = () => {
   }
 };
 
-export default ProfileScreen;
+const mapStateToProps = state => ({auth: state.auth});
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({logoutUser}, dispatch);
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
 
 const styles = StyleSheet.create({});

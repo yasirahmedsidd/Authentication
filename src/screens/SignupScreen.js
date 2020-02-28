@@ -1,6 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -114,6 +114,5 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch =>
   bindActionCreators({createUser}, dispatch);
+// eslint-disable-next-line prettier/prettier
 export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);
-
-const styles = StyleSheet.create({});
