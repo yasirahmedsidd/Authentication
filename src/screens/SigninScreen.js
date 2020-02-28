@@ -99,8 +99,8 @@ const SigninScreen = props => {
             }}
             // onPress={() => navigation.navigate('Profile')}>
             onPress={() => props.loginUser(contact, pass)}>
-            <Text style={{color: '#fff'}}>
-              {props.auth.isLoading ? 'Loading' : 'Log in'chableOpacity>
+            <Text style={{color: '#fff'}}>{props.auth.isLoading?"Loading":"Log in"}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
