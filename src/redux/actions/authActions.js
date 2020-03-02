@@ -105,22 +105,40 @@ export const logoutUser = () => {
 };
 
 const storeData = async (key, data) => {
-  try {
-    await AsyncStorage.setItem(key, data);
-    // const val = await AsyncStorage.getItem(key);
-    // console.log(val);
-  } catch (e) {
-    console.log(e);
-  }
+  return async dispatch => {
+    try {
+      dispatch({
+        type: actions.ASYNC_LOADING_START,
+      });
+      await AsyncStorage.setItem(key, data);
+      dispatch({
+        type: actions.ASYNC_LOADING_END,
+      });
+    } catch (error) {
+      console.log(e);
+      dispatch({
+        type: actions.ASYNC_LOADING_END,
+      });
+    }
+  };
+
+  // try {
+  //   await AsyncStorage.setItem(key, data);
+  //   // const val = await AsyncStorage.getItem(key);
+  //   // console.log(val);
+  // } catch (e) {
+  //   console.log(e);
+  // }
 };
 
 export const trylocalSignin = key => {
   return async dispatch => {
     try {
-      const val = await AsyncStorage.getItem(key);
       dispatch({
         type: actions.ASYNC_LOADING_START,
       });
+      const val = await AsyncStorage.getItem(key);
+      console.log('value of token is', val);
       if (val) {
         dispatch({
           type: actions.SET_TOKEN,
@@ -129,7 +147,32 @@ export const trylocalSignin = key => {
         dispatch({
           type: actions.ASYNC_LOADING_END,
         });
+      } else {
+        dispatch({
+          type: actions.ASYNC_LOADING_END,
+        });
       }
+    } catch (err) {
+      dispatch({
+        type: actions.ASYNC_ERROR,
+        data: err,
+      });
+      dispatch({
+        type: actions.ASYNC_LOADING_END,
+      });
+    }
+  };
+};
+export const removeTokenFromStorage = key => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: actions.ASYNC_LOADING_START,
+      });
+      await AsyncStorage.removeItem(key);
+      dispatch({
+        type: actions.ASYNC_LOADING_END,
+      });
     } catch (err) {
       dispatch({
         type: actions.ASYNC_ERROR,

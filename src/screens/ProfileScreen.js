@@ -5,7 +5,7 @@ import UserApi from '../apis/UserApi';
 import LoadingScreen from './LoadingScreen';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {logoutUser} from '../redux/actions/authActions';
+import {logoutUser, removeTokenFromStorage} from '../redux/actions/authActions';
 import AsyncStorage from '@react-native-community/async-storage';
 const ProfileScreen = props => {
   const navigation = useNavigation();
@@ -41,7 +41,13 @@ const ProfileScreen = props => {
     return (
       <View>
         <Text>ProfileScreen</Text>
-        <Button title="Log out" onPress={() => props.logoutUser()} />
+        <Button
+          title="Log out"
+          onPress={() => {
+            props.logoutUser();
+            props.removeTokenFromStorage('token');
+          }}
+        />
         <Button title="Reload" onPress={reload} />
         <View>
           <Text>{JSON.stringify(farms)}</Text>
@@ -57,7 +63,7 @@ const ProfileScreen = props => {
 
 const mapStateToProps = state => ({auth: state.auth});
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({logoutUser}, dispatch);
+  bindActionCreators({logoutUser, removeTokenFromStorage}, dispatch);
 // eslint-disable-next-line prettier/prettier
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
 

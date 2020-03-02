@@ -1,11 +1,10 @@
 import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducer/rootReducer';
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-export default (initialState = {}) => {
-  return createStore(
-    rootReducer,
-    initialState,
-    composeEnhancers(applyMiddleware(thunk)),
-  );
-};
+import Reactotron from '../ReactotronConfig';
+const store = createStore(
+  rootReducer,
+  // eslint-disable-next-line prettier/prettier
+  compose(applyMiddleware(thunk), Reactotron.createEnhancer()),
+);
+export default store;

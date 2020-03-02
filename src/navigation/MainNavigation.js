@@ -30,12 +30,21 @@ const Nav = ({auth, trylocalSignin}) => {
   useEffect(() => {
     trylocalSignin('token');
   }, []);
-  return (
-    <NavigationContainer>
-      <LoginStack.Navigator>
-        {auth.token ? (
+
+  if (auth.token) {
+    return (
+      <NavigationContainer>
+        <LoginStack.Navigator>
           <LoginStack.Screen name="Profile" component={ProfileScreen} />
-        ) : (
+        </LoginStack.Navigator>
+      </NavigationContainer>
+    );
+  } else if (auth.asyncLoading) {
+    return <></>;
+  } else {
+    return (
+      <NavigationContainer>
+        <LoginStack.Navigator>
           <>
             {auth.asyncLoading ? (
               <LoginStack.Screen name="Loading" component={LoadingScreen} />
@@ -50,10 +59,10 @@ const Nav = ({auth, trylocalSignin}) => {
               </>
             )}
           </>
-        )}
-      </LoginStack.Navigator>
-    </NavigationContainer>
-  );
+        </LoginStack.Navigator>
+      </NavigationContainer>
+    );
+  }
 };
 
 const mapStateToProps = state => ({auth: state.auth});
@@ -61,3 +70,28 @@ const mapStateToProps = state => ({auth: state.auth});
 const mapDispatchToProps = dispatch =>
   bindActionCreators({trylocalSignin}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(Nav);
+
+{
+  /* <NavigationContainer>
+<LoginStack.Navigator>
+  {auth.token ? (
+    <LoginStack.Screen name="Profile" component={ProfileScreen} />
+  ) : (
+    <>
+      {auth.asyncLoading && !auth.token ? (
+        <LoginStack.Screen name="Loading" component={LoadingScreen} />
+      ) : (
+        <>
+          <LoginStack.Screen
+            name="LoginOptions"
+            component={LoginOptionScreen}
+          />
+          <LoginStack.Screen name="Signin" component={SigninScreen} />
+          <LoginStack.Screen name="Signup" component={SignupScreen} />
+        </>
+      )}
+    </>
+  )}
+</LoginStack.Navigator>
+</NavigationContainer> */
+}
