@@ -6,7 +6,7 @@ import {Provider} from 'react-redux';
 
 const App = () => {
   return (
-    <Provider store={configureStore()}>
+    <Provider store={configureStore}>
       <Nav />
     </Provider>
   );
